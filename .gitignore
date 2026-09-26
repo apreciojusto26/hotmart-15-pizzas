@@ -36,3 +36,4 @@ Thumbs.db
 
 # Originales sin optimizar (los usados están optimizados en public/)
 /assets/
+.vercel
