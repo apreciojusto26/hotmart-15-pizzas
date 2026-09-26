@@ -1,0 +1,630 @@
+---
+import Analytics from '../components/Analytics.astro';
+import '../styles/global.css';
+
+const CHECKOUT_URL = 'https://pay.hotmart.com/M103554863Y?off=vileymy5';
+
+// Botón "Pincha aquí" del banner: abre WhatsApp con un mensaje ya escrito.
+// Número en formato internacional, sin "+" ni espacios. Vacío = el botón no se muestra.
+const WHATSAPP_NUMBER = '';
+const WHATSAPP_MESSAGE = 'Hola, acabo de pedir la masa universal gratis y tengo una consulta.';
+const CONTACT_URL = WHATSAPP_NUMBER ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}` : '';
+
+// Precio en €. Sin precio ancla: solo se muestra el precio real de Hotmart.
+const fmt = (n: number) => n.toFixed(2).replace('.', ',');
+const PRICE_N = 7.28;
+const PRICE = fmt(PRICE_N);
+
+// SEO: keyword principal "pizzas caseras fáciles" (+ "masa universal para pizza").
+const title = 'Pizzas Caseras Fáciles: Masa Universal + 15 Recetas | Italy Pizza';
+const description =
+  'Ebook con una masa universal paso a paso, 15 recetas de pizzas caseras fáciles y 2 focaccias sorpresa. Sin experiencia previa y con garantía de 7 días.';
+const PAGE_PATH = '/pizzas-caseras-faciles';
+const site = Astro.site;
+const canonical = site ? new URL(PAGE_PATH, site).href : undefined;
+const abs = (path: string) => (site ? new URL(path, site).href : path);
+const ogImage = abs('/ventas/og-pizzas-caseras-faciles.jpg');
+
+const icons = {
+  gift: 'M3 8h18v4H3V8Zm2 4h14v9H5v-9Zm7-4v13M12 8c-2 0-4-1-4-3s3-2 4 3Zm0 0c2 0 4-1 4-3s-3-2-4 3Z',
+  shield: 'M12 3 4 6v6c0 4.5 3.2 8 8 9 4.8-1 8-4.5 8-9V6l-8-3Zm-3 9 2 2 4-4',
+  bolt: 'M13 2 4 14h7l-1 8 9-12h-7l1-8Z',
+  lock: 'M6 11h12v9H6v-9Zm2 0V8a4 4 0 0 1 8 0v3',
+  check: 'm5 12 5 5 9-10',
+  question: 'M9 9a3 3 0 1 1 4.2 2.7c-.8.4-1.2 1-1.2 1.8M12 17.5v.5',
+  repeat: 'M17 2l4 4-4 4M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4M21 13v2a3 3 0 0 1-3 3H3',
+  flame: 'M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5Z',
+  pizza: 'M15 11h.01M11 15h.01M16 16h.01M2 16l20 6-6-20A20 20 0 0 0 2 16ZM5.71 17.11a17.04 17.04 0 0 1 11.4-11.4',
+  sparkle: 'M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3Zm7 12 .8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15Z',
+  list: 'M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01',
+};
+
+const problems = [
+  {
+    icon: 'question',
+    title: '¿Por dónde empiezo?',
+    text: 'No necesitas experiencia previa: aprendes a hacer pizzas desde cero, sin complicarte.',
+  },
+  {
+    icon: 'flame',
+    title: 'La masa nunca sale igual',
+    text: 'Una sola masa universal, explicada paso a paso, ideal para cualquier tipo de pizza.',
+  },
+  {
+    icon: 'repeat',
+    title: 'Siempre la misma pizza',
+    text: '15 combinaciones sencillas pero llenas de sabor para cocinar en casa para tu familia o amigos.',
+  },
+];
+
+const categories = [
+  { icon: 'flame', name: 'Masa universal' },
+  { icon: 'pizza', name: '15 pizzas' },
+  { icon: 'sparkle', name: '2 focaccias' },
+  { icon: 'list', name: 'Paso a paso' },
+];
+
+const focaccias = [1, 2];
+
+const steps = [
+  { title: 'Pulsa el botón', text: 'Te llevamos al checkout seguro de Hotmart.' },
+  { title: 'Completa tu pago', text: 'Pago único con los métodos disponibles en Hotmart.' },
+  { title: 'Recibe el acceso', text: 'Te llega por email. Ábrelo o descárgalo en móvil, tablet u ordenador.' },
+];
+
+const included = [
+  'Receta de masa universal paso a paso',
+  '15 recetas de pizzas caseras',
+  '2 recetas sorpresa de focaccias',
+];
+
+const faqs = [
+  {
+    q: '¿Para quién es este producto?',
+    a: 'Para cualquier persona que quiera preparar pizzas caseras de forma fácil y sin complicaciones: quienes cocinan en casa para su familia o amigos, principiantes que quieren aprender desde cero o personas interesadas en emprender y vender pizzas desde casa.',
+  },
+  {
+    q: '¿Necesito experiencia previa?',
+    a: 'No. La masa universal viene explicada paso a paso para que te salga bien y obtengas buenos resultados desde la primera vez.',
+  },
+  {
+    q: '¿Qué incluye exactamente?',
+    a: 'Una receta de masa universal ideal para cualquier tipo de pizza, 15 recetas de pizzas con combinaciones sencillas pero llenas de sabor y 2 recetas sorpresa de focaccias.',
+  },
+  {
+    q: '¿Es un producto físico?',
+    a: 'No. Es un ebook 100% digital: lo abres o lo descargas en el móvil, la tablet o el ordenador.',
+  },
+  {
+    q: '¿Cómo accedo al producto?',
+    a: 'Recibes el acceso por email. También lo encuentras en Hotmart: inicia sesión, ve a "Mi cuenta" y después a "Mis compras".',
+  },
+  {
+    q: '¿Cómo funciona la garantía?',
+    a: 'Tienes 7 días desde la compra para pedir el reembolso integral si el producto no te resulta satisfactorio. Se solicita desde la propia plataforma de Hotmart.',
+  },
+  {
+    q: '¿Quién procesa el pago?',
+    a: 'Hotmart, una plataforma de pagos segura. La compra y la entrega del acceso se gestionan ahí.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: 'Pizzas Caseras Fáciles: Masa Universal + 15 Recetas y 2 Focaccias Sorpresa',
+    description,
+    image: ogImage,
+    brand: { '@type': 'Brand', name: 'Italy Pizza' },
+    category: 'Ebook de recetas',
+    ...(canonical && { url: canonical }),
+    offers: {
+      '@type': 'Offer',
+      price: PRICE_N.toFixed(2),
+      priceCurrency: 'EUR',
+      availability: 'https://schema.org/InStock',
+      url: CHECKOUT_URL,
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="theme-color" content="#2b1a13" />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:site_name" content="Italy Pizza" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content="Ebook Pizzas Caseras Fáciles: masa universal, 15 recetas y 2 focaccias sorpresa" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+    <Analytics />
+  </head>
+  <body class="overflow-x-hidden pb-20 md:pb-0" data-price={PRICE_N}>
+    <!-- BANNER DE CONFIRMACIÓN: solo aparece al llegar desde el formulario (?enviado=1) -->
+    <div id="lead-banner" hidden>
+      <div role="status" aria-live="polite" class="lead-banner relative overflow-hidden border-b-[3px] border-pizza-amber bg-linear-to-r from-pizza-deep via-pizza-brown to-pizza-deep text-white shadow-[0_10px_30px_rgba(43,26,19,.35)]">
+        <div class="pointer-events-none absolute -top-16 -left-10 size-48 rounded-full bg-pizza-success/25 blur-3xl"></div>
+        <div class="pointer-events-none absolute -right-10 -bottom-16 size-48 rounded-full bg-pizza-red/25 blur-3xl"></div>
+
+        <div class="relative mx-auto flex max-w-[1180px] flex-col items-center gap-4 px-5 py-5 pr-14 text-center sm:px-6 sm:pr-16 md:flex-row md:gap-6 md:py-4 md:text-left">
+          <div class="relative flex size-14 shrink-0 items-center justify-center">
+            <span class="lead-check-ring absolute inset-0 rounded-full bg-pizza-success" aria-hidden="true"></span>
+            <svg viewBox="0 0 52 52" class="relative size-14 drop-shadow-[0_6px_14px_rgba(62,207,142,.45)]" fill="none" aria-hidden="true">
+              <circle class="lead-check-circle" cx="26" cy="26" r="25" fill="#3ecf8e" />
+              <path class="lead-check-mark" d="M15 27.5l8 8L38 19" pathLength="1" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+
+          <div class="md:flex-1">
+            <p class="m-0 font-display text-lg leading-snug font-extrabold sm:text-xl">
+              ¡Tu masa universal fue enviada a tu correo!
+            </p>
+            <p class="m-0 mt-1 text-sm leading-[1.55] text-white/80 sm:text-[15px]">
+              Revisa tu bandeja de entrada (y la carpeta de spam, por si acaso).
+            </p>
+          </div>
+
+          {
+            CONTACT_URL && (
+              <a
+                href={CONTACT_URL}
+                target="_blank"
+                rel="noopener"
+                class="group inline-flex min-h-[46px] shrink-0 items-center justify-center rounded-full bg-white px-6 text-sm font-extrabold text-pizza-deep shadow-[0_8px_20px_rgba(0,0,0,.25)] transition hover:-translate-y-0.5 hover:bg-pizza-amber-light focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-pizza-amber"
+              >
+                Pincha aquí <span class="ml-2 transition-transform group-hover:-translate-x-1" aria-hidden="true">←</span>
+              </a>
+            )
+          }
+        </div>
+
+        <button
+          type="button"
+          id="lead-banner-close"
+          aria-label="Cerrar aviso"
+          class="absolute top-2.5 right-3 flex size-10 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/25 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-pizza-amber sm:right-4"
+        >
+          <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ANNOUNCEMENT -->
+    <div class="bg-pizza-deep px-4 py-2.5 text-center text-xs font-semibold tracking-wide text-white sm:text-[13px]">
+      <span class="text-pizza-amber">SORPRESA:</span> 2 recetas de focaccia incluidas · Garantía de 7 días
+    </div>
+
+    <!-- HERO -->
+    <header class="relative overflow-hidden bg-pizza-cream">
+      <div class="pointer-events-none absolute -top-32 -right-24 size-[420px] rounded-full bg-pizza-red/12 blur-3xl"></div>
+      <div class="pointer-events-none absolute -bottom-40 -left-24 size-[420px] rounded-full bg-pizza-amber/20 blur-3xl"></div>
+
+      <div class="relative mx-auto max-w-[1180px] px-5 pt-6 pb-16 sm:px-6 lg:pt-8 lg:pb-24">
+        <img src="/assets/logo-italypizza.png" alt="Italy Pizza" width="2064" height="549" class="mx-auto mb-8 w-[150px] lg:mx-0 lg:w-[180px]" />
+
+        <div class="grid items-center gap-12 lg:grid-cols-[1.02fr_0.98fr] lg:gap-14">
+          <div class="text-center lg:text-left">
+            <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-pizza-brown/10 bg-white px-4 py-2 text-[11px] font-bold tracking-[0.8px] text-pizza-brown shadow-sm">
+              <span class="size-2 animate-pulse rounded-full bg-pizza-red"></span>
+              EBOOK · MASA UNIVERSAL + 15 RECETAS + 2 FOCACCIAS
+            </div>
+
+            <h1 class="mb-5 font-display text-[38px] leading-[1.04] font-extrabold tracking-[-1.6px] text-pizza-text sm:text-5xl lg:text-[clamp(44px,4.8vw,64px)] lg:tracking-[-2.6px]">
+              <span class="text-pizza-red">Pizzas caseras fáciles</span> con una sola <span class="text-pizza-brown">masa universal</span>
+            </h1>
+
+            <p class="mx-auto mb-7 max-w-[560px] text-base leading-[1.65] text-pizza-muted sm:text-lg lg:mx-0">
+              Descubre cómo hacer pizzas caseras con combinaciones sencillas pero llenas de sabor. Empieza a cocinar en casa para tu familia o amigos, y aprende a hacer pizzas <strong class="text-pizza-text">desde cero sin complicarte</strong>.
+            </p>
+
+            <ul class="mx-auto mb-8 grid max-w-[480px] gap-3 text-left lg:mx-0">
+              {
+                ['Masa universal explicada paso a paso', '15 recetas de pizzas + 2 focaccias sorpresa', 'Acceso inmediato desde cualquier dispositivo'].map((t) => (
+                  <li class="flex items-center gap-3 text-[15px] font-semibold">
+                    <span class="flex size-6 shrink-0 items-center justify-center rounded-full bg-pizza-basil text-white">
+                      <svg viewBox="0 0 24 24" class="size-3.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={icons.check} /></svg>
+                    </span>
+                    {t}
+                  </li>
+                ))
+              }
+            </ul>
+
+            <div class="flex flex-col items-center gap-4 sm:flex-row sm:justify-center lg:justify-start">
+              <a href={CHECKOUT_URL} target="_blank" rel="nofollow noopener" class="cta group relative isolate inline-flex min-h-[62px] w-full items-center justify-center overflow-hidden rounded-2xl bg-linear-to-br from-[#d23a3d] to-[#b3242a] px-8 text-base font-extrabold text-white shadow-[0_14px_32px_rgba(190,40,43,.4)] transition hover:-translate-y-0.5 sm:w-auto sm:text-[17px]">
+                <span class="pointer-events-none absolute inset-y-0 -left-1/3 -z-10 w-1/4 animate-shine bg-white/30"></span>
+                Quiero hacer mis pizzas
+                <span class="ml-2.5 transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
+              </a>
+            </div>
+
+            <p class="mt-4 flex items-center justify-center gap-1.5 text-[12px] text-pizza-muted lg:justify-start">
+              <svg viewBox="0 0 24 24" class="size-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={icons.lock} /></svg>
+              Pago seguro procesado por Hotmart
+            </p>
+          </div>
+
+          <div class="relative mx-auto w-full max-w-[560px]">
+            <div class="absolute inset-[6%] rounded-full bg-linear-to-br from-[#fbe3c8] to-white"></div>
+            <div class="relative rotate-[1.5deg] rounded-[28px] bg-white p-3 shadow-[0_40px_80px_rgba(91,48,28,.22)] sm:p-4">
+              <img src="/ventas/producto.webp" alt="Ebook 15 pizzas caseras fáciles: masa base, 15 recetas y 2 recetas sorpresa, por Ernesto Daniel Longone" width="600" height="600" fetchpriority="high" class="block h-auto w-full rounded-[20px]" />
+            </div>
+            <span class="absolute -top-3 -right-1 rotate-6 animate-float rounded-xl bg-pizza-red px-4 py-2.5 text-[11px] font-extrabold tracking-wider text-white shadow-[0_12px_24px_rgba(190,40,43,.35)] sm:right-2 sm:text-xs" style="--tw-float-rot:6deg">+2 FOCACCIAS SORPRESA</span>
+            <span class="absolute -bottom-4 left-0 flex -rotate-3 items-center gap-2 rounded-xl bg-pizza-deep px-4 py-2.5 text-[11px] font-bold text-white shadow-xl sm:left-4 sm:text-xs">
+              <svg viewBox="0 0 24 24" class="size-4 text-pizza-amber" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={icons.shield} /></svg>
+              Garantía de 7 días
+            </span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- STRIP -->
+      <section class="bg-pizza-deep text-white">
+        <div class="mx-auto grid max-w-[1180px] grid-cols-2 gap-y-6 px-5 py-8 sm:px-6 lg:grid-cols-4">
+          {
+            [
+              ['1', 'masa universal'],
+              ['15', 'recetas de pizzas'],
+              ['2', 'focaccias sorpresa'],
+              ['7 días', 'de garantía'],
+            ].map(([n, l]) => (
+              <div class="text-center">
+                <p class="m-0 font-display text-3xl font-extrabold text-pizza-amber sm:text-4xl">{n}</p>
+                <p class="m-0 mt-1 text-xs text-white/70 sm:text-sm">{l}</p>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      <!-- PROBLEM -->
+      <section class="bg-white py-20 sm:py-24">
+        <div class="mx-auto max-w-[1080px] px-5 sm:px-6">
+          <div class="mx-auto max-w-[720px] text-center">
+            <p class="mb-3 text-[11px] font-extrabold tracking-[1.3px] text-pizza-red">MÁS SABOR, MENOS COMPLICACIONES</p>
+            <h2 class="mb-4 font-display text-[30px] leading-[1.12] font-extrabold tracking-[-1.2px] sm:text-[44px] sm:tracking-[-1.8px]">¿Quieres hacer pizza en casa y no sabes por dónde empezar?</h2>
+            <p class="m-0 text-base leading-[1.7] text-pizza-muted sm:text-[17px]">Con una buena masa y recetas claras, hacer pizza casera es mucho más fácil de lo que parece.</p>
+          </div>
+
+          <div class="mt-12 grid gap-5 md:grid-cols-3">
+            {
+              problems.map((p) => (
+                <article class="rounded-3xl border border-pizza-brown/10 bg-pizza-cream p-7 transition hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(91,48,28,.1)]">
+                  <div class="mb-5 flex size-13 items-center justify-center rounded-2xl bg-pizza-red/12 text-pizza-red">
+                    <svg viewBox="0 0 24 24" class="size-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={icons[p.icon as keyof typeof icons]} /></svg>
+                  </div>
+                  <h3 class="mb-2 font-display text-lg font-extrabold">{p.title}</h3>
+                  <p class="m-0 text-sm leading-[1.65] text-pizza-muted">{p.text}</p>
+                </article>
+              ))
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- PRODUCT -->
+      <section class="bg-pizza-brown-light py-20 sm:py-24">
+        <div class="mx-auto grid max-w-[1080px] items-center gap-12 px-5 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+          <div class="relative mx-auto w-full max-w-[420px]">
+            <div class="absolute -top-2 -left-2 size-16 rounded-full bg-pizza-amber/30"></div>
+            <div class="absolute -right-3 -bottom-3 size-24 rounded-full bg-pizza-red/15"></div>
+            <div class="relative -rotate-2 rounded-[28px] bg-white p-3 shadow-[0_30px_60px_rgba(91,48,28,.18)]">
+              <img src="/ventas/producto.webp" alt="Portada del ebook Pizzas Caseras Fáciles" width="600" height="600" loading="lazy" class="block h-auto w-full rounded-[20px]" />
+            </div>
+          </div>
+
+          <div>
+            <p class="mb-3 text-[11px] font-extrabold tracking-[1.3px] text-pizza-red">SOBRE EL CONTENIDO</p>
+            <h2 class="mb-4 font-display text-[30px] leading-[1.12] font-extrabold tracking-[-1.2px] sm:text-[42px] sm:tracking-[-1.7px]">
+              Pizzas caseras fáciles, <span class="text-pizza-brown">rápidas y deliciosas</span>
+            </h2>
+            <p class="mb-7 text-base leading-[1.7] text-pizza-muted">Aprende a preparar pizzas caseras sin necesidad de experiencia previa. Incluye una receta de masa universal, ideal para cualquier tipo de pizza, explicada paso a paso para que siempre te quede bien. Además, 15 recetas de pizzas y 2 recetas sorpresa de focaccias.</p>
+
+            <div class="mb-8 flex flex-wrap gap-2.5">
+              {
+                categories.map((c) => (
+                  <span class="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm font-bold text-pizza-brown shadow-sm">
+                    <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={icons[c.icon as keyof typeof icons]} /></svg>
+                    {c.name}
+                  </span>
+                ))
+              }
+            </div>
+
+            <ul class="mb-8 grid gap-4">
+              {
+                [
+                  ['Una masa para todo', 'La masa universal sirve para cualquier tipo de pizza.'],
+                  ['Combinaciones con sabor', '15 recetas sencillas pero llenas de sabor.'],
+                  ['Resultados desde el primer día', 'Todo explicado para que te salga bien desde la primera vez.'],
+                ].map(([t, d]) => (
+                  <li class="flex gap-3.5">
+                    <span class="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-lg bg-white text-pizza-basil">
+                      <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={icons.check} /></svg>
+                    </span>
+                    <span>
+                      <strong class="block">{t}</strong>
+                      <span class="text-sm text-pizza-muted">{d}</span>
+                    </span>
+                  </li>
+                ))
+              }
+            </ul>
+
+            <a href={CHECKOUT_URL} target="_blank" rel="nofollow noopener" class="inline-flex min-h-[58px] w-full items-center justify-center rounded-2xl bg-linear-to-br from-[#d23a3d] to-[#b3242a] px-8 text-base font-extrabold text-white shadow-[0_12px_28px_rgba(190,40,43,.32)] transition hover:-translate-y-0.5 sm:w-auto">
+              Quiero el ebook <span class="ml-2" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- FOCACCIAS SORPRESA -->
+      <section class="relative overflow-hidden bg-pizza-deep py-20 text-white sm:py-24">
+        <div class="pointer-events-none absolute top-0 left-1/2 h-[420px] w-[820px] -translate-x-1/2 rounded-full bg-pizza-amber/10 blur-3xl"></div>
+        <div class="relative mx-auto max-w-[1180px] px-5 sm:px-6">
+          <div class="mx-auto max-w-[760px] text-center">
+            <p class="mb-3 text-[11px] font-extrabold tracking-[1.3px] text-pizza-amber">Y ADEMÁS, DE SORPRESA</p>
+            <h2 class="mb-4 font-display text-[30px] leading-[1.12] font-extrabold tracking-[-1.2px] sm:text-[46px] sm:tracking-[-1.9px]">
+              2 recetas de focaccia <span class="text-pizza-amber">incluidas</span>
+            </h2>
+            <p class="m-0 text-base leading-[1.7] text-white/70 sm:text-[17px]">Además de las 15 pizzas, el ebook trae 2 recetas sorpresa de focaccias. Sin costo extra, en la misma compra.</p>
+          </div>
+
+          <div class="mx-auto mt-14 grid max-w-[1000px] gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {
+              focaccias.map((n) => (
+                <article class="group overflow-hidden rounded-3xl border border-white/10 bg-white/[.06] backdrop-blur transition hover:-translate-y-1 hover:border-pizza-amber/50">
+                  <div class="relative flex aspect-[4/3] items-center justify-center bg-linear-to-br from-pizza-brown to-pizza-deep">
+                    <div class="absolute size-32 rounded-full bg-pizza-amber/15 blur-2xl transition duration-500 group-hover:scale-125"></div>
+                    <svg viewBox="0 0 24 24" class="relative size-16 text-pizza-amber transition duration-500 group-hover:scale-110 group-hover:rotate-12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={icons.sparkle} /></svg>
+                    <span class="absolute top-3 left-3 rounded-full bg-pizza-amber px-3 py-1 text-[10px] font-extrabold tracking-wider text-pizza-deep">SORPRESA {n}</span>
+                    <span class="absolute top-3 right-3 rounded-full bg-pizza-red px-3 py-1 text-[10px] font-extrabold tracking-wider text-white">INCLUIDA</span>
+                  </div>
+                  <div class="p-6">
+                    <h3 class="mb-2 font-display text-lg leading-snug font-extrabold">Focaccia sorpresa n.º {n}</h3>
+                    <p class="m-0 text-sm leading-[1.6] text-white/70">La descubres al abrir el ebook.</p>
+                  </div>
+                </article>
+              ))
+            }
+
+            <article class="flex flex-col justify-center rounded-3xl bg-linear-to-br from-pizza-red to-pizza-red-dark p-8 text-center shadow-[0_20px_50px_rgba(190,40,43,.3)] sm:col-span-2 lg:col-span-1">
+              <svg viewBox="0 0 24 24" class="mx-auto mb-4 size-10 text-white" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={icons.gift} /></svg>
+              <h3 class="mb-2 font-display text-xl font-extrabold">Todo en una sola compra</h3>
+              <p class="mb-6 text-sm leading-[1.6] text-white/90">Masa universal, 15 pizzas y 2 focaccias, con acceso inmediato.</p>
+              <a href={CHECKOUT_URL} target="_blank" rel="nofollow noopener" class="inline-flex min-h-[54px] items-center justify-center rounded-2xl bg-white px-6 text-[15px] font-extrabold text-pizza-red-dark transition hover:-translate-y-0.5">
+                Quiero mis recetas <span class="ml-2" aria-hidden="true">→</span>
+              </a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- AUTOR -->
+      <section class="bg-pizza-cream py-20 sm:py-24">
+        <div class="mx-auto grid max-w-[1000px] items-center gap-12 px-5 sm:px-6 md:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+          <div class="relative mx-auto w-full max-w-[340px]">
+            <div class="absolute -top-3 -left-3 size-20 rounded-full bg-pizza-amber/30"></div>
+            <figure class="relative m-0 overflow-hidden rounded-[28px] bg-white p-2.5 shadow-[0_24px_50px_rgba(91,48,28,.16)]">
+              <img src="/ventas/autor.webp" alt="Ernesto Daniel Longone, autor del ebook" width="720" height="1280" loading="lazy" class="block aspect-[4/5] h-auto w-full rounded-[20px] object-cover object-top" />
+            </figure>
+          </div>
+
+          <div class="text-center md:text-left">
+            <p class="mb-3 text-[11px] font-extrabold tracking-[1.3px] text-pizza-red">CONOCE A QUIEN HA CREADO EL CONTENIDO</p>
+            <h2 class="mb-5 font-display text-[30px] leading-[1.12] font-extrabold tracking-[-1.2px] sm:text-[42px] sm:tracking-[-1.7px]">Ernesto Daniel Longone</h2>
+            <p class="mb-4 text-base leading-[1.7] text-pizza-muted">Mi experiencia con la pizza viene de casa. Aprendí de mi padre, de origen italiano, quien me enseñó a preparar pizza, focaccia, calzone y otras recetas tradicionales, siempre respetando la masa y sus tiempos.</p>
+            <p class="mb-6 text-base leading-[1.7] text-pizza-muted">Con el tiempo me especialicé en masas de fermentación prolongada, logrando pizzas más esponjosas, sabrosas y fáciles de digerir. Hoy quiero compartir este conocimiento contigo para que puedas hacer una buena pizza casera, natural y saludable, de forma sencilla.</p>
+            <span class="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm font-bold text-pizza-brown shadow-sm">
+              <svg viewBox="0 0 24 24" class="size-4 text-pizza-red" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={icons.flame} /></svg>
+              Especialista en masas de fermentación prolongada
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- HOW -->
+      <section class="bg-white py-20 sm:py-24">
+        <div class="mx-auto max-w-[1000px] px-5 sm:px-6">
+          <div class="text-center">
+            <p class="mb-3 text-[11px] font-extrabold tracking-[1.3px] text-pizza-red">ACCESO EN 3 PASOS</p>
+            <h2 class="mb-12 font-display text-[30px] leading-[1.12] font-extrabold tracking-[-1.2px] sm:text-[42px] sm:tracking-[-1.7px]">Así de fácil recibes tu ebook</h2>
+          </div>
+          <div class="grid gap-8 md:grid-cols-3">
+            {
+              steps.map((s, i) => (
+                <div class="relative text-center">
+                  <div class="mx-auto mb-5 flex size-14 items-center justify-center rounded-full bg-pizza-brown font-display text-xl font-extrabold text-white shadow-[0_10px_24px_rgba(139,71,41,.3)]">{i + 1}</div>
+                  <h3 class="mb-2 font-display text-lg font-extrabold">{s.title}</h3>
+                  <p class="mx-auto m-0 max-w-[280px] text-sm leading-[1.6] text-pizza-muted">{s.text}</p>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- OFFER -->
+      <section id="oferta" class="relative overflow-hidden bg-linear-to-b from-pizza-brown-light to-pizza-cream py-20 sm:py-24">
+        <div class="mx-auto max-w-[1000px] px-5 sm:px-6">
+          <div class="overflow-hidden rounded-[32px] border border-pizza-brown/10 bg-white shadow-[0_30px_80px_rgba(91,48,28,.16)]">
+            <div class="bg-pizza-deep px-6 py-4 text-center text-xs font-extrabold tracking-[1.2px] text-pizza-amber sm:text-[13px]">MASA UNIVERSAL + 15 RECETAS + 2 FOCACCIAS SORPRESA</div>
+
+            <div class="grid items-center gap-10 p-6 sm:p-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12">
+              <div class="relative mx-auto w-full max-w-[340px]">
+                <div class="absolute inset-4 rounded-full bg-pizza-brown-light"></div>
+                <img src="/ventas/producto.webp" alt="Ebook Pizzas Caseras Fáciles" width="600" height="600" loading="lazy" class="relative block h-auto w-full rotate-2 rounded-[22px] shadow-2xl" />
+              </div>
+
+              <div>
+                <h2 class="mb-5 font-display text-[28px] leading-[1.12] font-extrabold tracking-[-1.1px] sm:text-4xl">Llévate todo hoy, en un solo pago</h2>
+                <ul class="mb-6 grid">
+                  {
+                    included.map((label) => (
+                      <li class="flex items-center justify-between gap-3 border-b border-pizza-brown/10 py-3 text-sm">
+                        <span class="flex items-center gap-2.5 font-semibold">
+                          <svg viewBox="0 0 24 24" class="size-4 shrink-0 text-pizza-basil" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={icons.check} /></svg>
+                          {label}
+                        </span>
+                        <span class="shrink-0 rounded-full bg-pizza-brown-light px-2.5 py-1 text-[10px] font-extrabold tracking-wider text-pizza-brown">INCLUIDO</span>
+                      </li>
+                    ))
+                  }
+                </ul>
+
+                <p class="mb-1 text-xs font-extrabold tracking-[1.2px] text-pizza-muted">POR APENAS</p>
+                <div class="mb-1 flex items-end gap-2">
+                  <span class="font-display text-[64px] leading-none font-extrabold tracking-[-2.5px] text-pizza-deep">{PRICE}</span>
+                  <span class="mb-2 font-display text-3xl font-extrabold text-pizza-deep">€</span>
+                </div>
+                <p class="mb-5 text-xs text-pizza-muted">Pago 100% seguro con acceso inmediato.</p>
+
+                <a href={CHECKOUT_URL} target="_blank" rel="nofollow noopener" class="cta group relative isolate flex min-h-[64px] w-full items-center justify-center overflow-hidden rounded-2xl bg-linear-to-br from-[#d23a3d] to-[#b3242a] px-6 text-[17px] font-extrabold text-white shadow-[0_14px_32px_rgba(190,40,43,.4)] transition hover:-translate-y-0.5">
+                  <span class="pointer-events-none absolute inset-y-0 -left-1/3 -z-10 w-1/4 animate-shine bg-white/30"></span>
+                  Quiero el ebook por {PRICE} € <span class="ml-2 transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
+                </a>
+
+                <div class="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] text-pizza-muted">
+                  <span class="inline-flex items-center gap-1.5"><svg viewBox="0 0 24 24" class="size-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={icons.lock} /></svg>Pago seguro</span>
+                  <span class="inline-flex items-center gap-1.5"><svg viewBox="0 0 24 24" class="size-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={icons.bolt} /></svg>Acceso digital</span>
+                  <span class="inline-flex items-center gap-1.5"><svg viewBox="0 0 24 24" class="size-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={icons.shield} /></svg>Garantía 7 días</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- GUARANTEE -->
+      <section class="bg-pizza-deep py-16 text-white sm:py-20">
+        <div class="mx-auto grid max-w-[820px] items-center gap-8 px-5 text-center sm:px-6 md:grid-cols-[auto_1fr] md:text-left">
+          <div class="mx-auto flex size-[130px] flex-col items-center justify-center rounded-full border-[3px] border-pizza-amber bg-linear-to-br from-pizza-amber/25 to-pizza-amber/5 font-display shadow-[0_0_50px_rgba(252,165,3,.25)]">
+            <span class="text-5xl leading-none font-extrabold text-pizza-amber">7</span>
+            <span class="text-xs font-extrabold tracking-[2px] text-pizza-amber-light">DÍAS</span>
+          </div>
+          <div>
+            <p class="mb-2 text-[11px] font-extrabold tracking-[1.2px] text-pizza-amber">GARANTÍA DE HOTMART</p>
+            <h2 class="mb-3 font-display text-3xl leading-[1.15] font-extrabold sm:text-4xl">Pruébalo sin riesgo</h2>
+            <p class="m-0 leading-[1.65] text-white/70">Tendrás tu dinero de vuelta sin preguntas hasta 7 días después de la compra. El reembolso se pide desde Hotmart.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="bg-white py-20 sm:py-24">
+        <div class="mx-auto max-w-[780px] px-5 sm:px-6">
+          <div class="text-center">
+            <p class="mb-3 text-[11px] font-extrabold tracking-[1.3px] text-pizza-red">PREGUNTAS FRECUENTES</p>
+            <h2 class="mb-10 font-display text-[30px] leading-[1.12] font-extrabold tracking-[-1.2px] sm:text-[42px] sm:tracking-[-1.7px]">Todo claro antes de comprar</h2>
+          </div>
+          <div>
+            {
+              faqs.map((f) => (
+                <details class="group border-b border-pizza-brown/10">
+                  <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-left text-base font-bold marker:hidden [&::-webkit-details-marker]:hidden">
+                    {f.q}
+                    <span class="text-2xl leading-none text-pizza-red transition-transform duration-200 group-open:rotate-45" aria-hidden="true">+</span>
+                  </summary>
+                  <p class="m-0 pb-5 text-[15px] leading-[1.7] text-pizza-muted">{f.a}</p>
+                </details>
+              ))
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- FINAL CTA -->
+      <section class="bg-pizza-cream px-5 py-16 sm:px-6 sm:py-20">
+        <div class="relative mx-auto max-w-[920px] overflow-hidden rounded-[32px] bg-pizza-deep px-6 py-14 text-center text-white sm:px-12 sm:py-16">
+          <div class="pointer-events-none absolute -top-24 -right-16 size-64 rounded-full bg-white/5"></div>
+          <div class="pointer-events-none absolute -bottom-24 -left-16 size-52 rounded-full bg-pizza-red/25"></div>
+          <div class="relative">
+            <p class="mb-3 text-[11px] font-extrabold tracking-[1.3px] text-pizza-amber">TU PRÓXIMA PIZZA TE ESPERA</p>
+            <h2 class="mx-auto mb-4 max-w-[640px] font-display text-3xl leading-[1.12] font-extrabold tracking-[-1.2px] sm:text-[44px] sm:tracking-[-1.8px]">Masa universal, 15 pizzas y 2 focaccias siempre a mano</h2>
+            <p class="mx-auto mb-8 max-w-[520px] leading-[1.65] text-white/70">Acceso digital inmediato, pago seguro y 7 días de garantía.</p>
+            <a href={CHECKOUT_URL} target="_blank" rel="nofollow noopener" class="inline-flex min-h-[62px] w-full items-center justify-center rounded-2xl bg-linear-to-br from-[#d23a3d] to-[#b3242a] px-8 text-base font-extrabold text-white shadow-[0_14px_32px_rgba(190,40,43,.4)] transition hover:-translate-y-0.5 sm:w-auto sm:text-[17px]">
+              Quiero acceder ahora <span class="ml-2" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-pizza-cream px-5 pt-4 pb-12 text-center">
+      <img src="/assets/logo-italypizza.png" alt="Italy Pizza" width="2064" height="549" class="mx-auto mb-4 w-[130px]" />
+      <p class="mx-auto my-2 max-w-[720px] text-[11px] leading-[1.6] text-[#948379]">Recetas por Ernesto Daniel Longone.</p>
+      <p class="m-0 mt-3 text-[11px] text-[#948379]">© 2026 Italy Pizza. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- MOBILE STICKY CTA -->
+    <div class="fixed inset-x-0 bottom-0 z-50 border-t border-pizza-brown/10 bg-white/95 p-3 shadow-[0_-8px_28px_rgba(43,26,19,.14)] backdrop-blur md:hidden">
+      <a href={CHECKOUT_URL} target="_blank" rel="nofollow noopener" class="flex min-h-[52px] w-full items-center justify-center rounded-xl bg-linear-to-br from-[#d23a3d] to-[#b3242a] px-4 text-[15px] font-extrabold text-white">
+        Quiero el ebook por {PRICE} € <span class="ml-2" aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <script>
+      // Mostramos el banner solo si venimos del formulario y limpiamos la URL para que no reaparezca al recargar o compartir el enlace.
+      const banner = document.getElementById('lead-banner');
+      const params = new URLSearchParams(location.search);
+
+      if (banner && params.get('enviado') === '1') {
+        banner.hidden = false;
+        params.delete('enviado');
+        const query = params.toString();
+        history.replaceState(null, '', location.pathname + (query ? `?${query}` : '') + location.hash);
+      }
+
+      document.getElementById('lead-banner-close')?.addEventListener('click', () => {
+        if (banner) banner.hidden = true;
+      });
+
+      // GA4: clic hacia el checkout de Hotmart (inicio de compra). `beacon` asegura el envío aunque la página se descargue.
+      document.addEventListener('click', (event) => {
+        const link = (event.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="https://pay.hotmart.com"]');
+        if (!link) return;
+        (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag?.('event', 'begin_checkout', {
+          currency: 'EUR',
+          value: Number(document.body.dataset.price),
+          transport_type: 'beacon',
+        });
+      });
+    </script>
+  </body>
+</html>

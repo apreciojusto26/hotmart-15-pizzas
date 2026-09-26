@@ -1,0 +1,59 @@
+---
+import Analytics from '../components/Analytics.astro';
+import '../styles/global.css';
+
+const title = 'Página no encontrada | Italy Pizza';
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#fdf8f1" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+    <Analytics />
+  </head>
+  <body>
+    <main class="capture-background relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-12 text-center">
+      <div class="pointer-events-none absolute -top-32 -right-24 size-[380px] rounded-full bg-pizza-red/12 blur-3xl"></div>
+      <div class="pointer-events-none absolute -bottom-40 -left-24 size-[380px] rounded-full bg-pizza-amber/20 blur-3xl"></div>
+
+      <div class="relative w-full max-w-[560px]">
+        <a href="/" aria-label="Ir al inicio">
+          <img src="/assets/logo-italypizza.png" alt="Italy Pizza" width="2064" height="549" class="mx-auto mb-8 w-[160px]" />
+        </a>
+
+        <p class="m-0 font-display text-[110px] leading-none font-extrabold tracking-[-6px] text-pizza-brown sm:text-[150px]">
+          4<span class="text-pizza-red">0</span>4
+        </p>
+
+        <h1 class="mt-4 mb-3 font-display text-[28px] leading-[1.15] font-extrabold tracking-[-1px] text-pizza-text sm:text-4xl">
+          Esta página no existe
+        </h1>
+        <p class="mx-auto mb-8 max-w-[420px] text-base leading-[1.65] text-pizza-muted">
+          Puede que el enlace esté roto o que la página se haya movido. Pero tus pizzas siguen esperándote.
+        </p>
+
+        <div class="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+          <a
+            href="/pizzas-caseras-faciles"
+            class="inline-flex min-h-[56px] w-full items-center justify-center rounded-2xl bg-linear-to-br from-[#d23a3d] to-[#b3242a] px-8 text-base font-extrabold text-white shadow-[0_12px_28px_rgba(190,40,43,.32)] transition hover:-translate-y-0.5 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-pizza-brown sm:w-auto"
+          >
+            Ver las 15 recetas <span class="ml-2" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
