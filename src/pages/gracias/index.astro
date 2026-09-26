@@ -1,0 +1,33 @@
+---
+import ThankYou from '../../components/ThankYou.astro';
+import { PURCHASES_URL } from '../../consts';
+---
+
+<!-- Hotmart → "URL para Compras Aprobadas" -->
+<ThankYou
+  variant="approved"
+  title="¡Gracias por tu compra! | Italy Pizza"
+  eyebrow="COMPRA CONFIRMADA"
+  heading="¡Ya puedes empezar a hacer"
+  highlight="tus pizzas!"
+  lead="Gracias por confiar en nosotros. Tu ebook Pizzas Caseras Fáciles ya es tuyo y el acceso está en camino a tu correo."
+  steps={[
+    {
+      title: 'Revisa tu email',
+      text: 'Hotmart te envía el acceso al correo que usaste en la compra. Si no lo ves en unos minutos, mira en spam o promociones.',
+    },
+    {
+      title: 'Entra a "Mis compras"',
+      text: 'También puedes abrir o descargar el ebook desde Hotmart, en cualquier dispositivo: móvil, tablet u ordenador.',
+    },
+    {
+      title: 'Empieza por la masa universal',
+      text: 'Es la base de las 15 recetas. Prepárala paso a paso, respetando sus tiempos, y después elige tu primera pizza.',
+    },
+  ]}
+  note={{
+    title: '¿No te llegó el email?',
+    text: 'Revisa la carpeta de spam y que el correo de la compra esté bien escrito. Tu ebook siempre está disponible en "Mis compras" de Hotmart.',
+  }}
+  cta={{ label: 'Acceder a mi ebook', href: PURCHASES_URL }}
+/>

@@ -5,6 +5,16 @@ Página de ventas del ebook en Hotmart (venta directa: somos productores).
 - **`/pizzas-caseras-faciles`** Página de ventas: masa universal + 15 recetas + 2 focaccias sorpresa, con botón al checkout de Hotmart.
 - **`/`** Redirige a la página de ventas (`redirects` en `astro.config.mjs`).
 
+### Páginas de agradecimiento (Hotmart → Página externa)
+
+Plantilla común en `src/components/ThankYou.astro`; son `noindex` y no están en el sitemap.
+
+| Campo en Hotmart                               | URL                                              |
+| ---------------------------------------------- | ------------------------------------------------ |
+| URL para Compras Aprobadas                     | `https://recetas.italypizza.es/gracias`          |
+| URL para Compras a la espera de pago           | `https://recetas.italypizza.es/gracias/pago-pendiente` |
+| URL para Compras a la Espera del Análisis de Crédito | `https://recetas.italypizza.es/gracias/en-analisis` |
+
 ### Captura desactivada (se conserva el código)
 
 La página de captura (`src/pages/_captura.astro`) y el endpoint (`src/pages/api/_lead.ts`) **no se publican**: Astro ignora los archivos de `src/pages/` que empiezan por `_`. Para reactivar el embudo con lead magnet:

@@ -1,0 +1,33 @@
+---
+import ThankYou from '../../components/ThankYou.astro';
+import { PURCHASES_URL } from '../../consts';
+---
+
+<!-- Hotmart → "URL para Compras a la Espera del Análisis de Crédito" -->
+<ThankYou
+  variant="review"
+  title="Pago en análisis | Italy Pizza"
+  eyebrow="PAGO EN ANÁLISIS"
+  heading="Estamos verificando"
+  highlight="tu pago"
+  lead="Tu compra del ebook Pizzas Caseras Fáciles está en una revisión de seguridad. Es un paso habitual para proteger tu tarjeta."
+  steps={[
+    {
+      title: 'Revisión de seguridad',
+      text: 'Hotmart comprueba el pago para evitar fraudes con tu tarjeta. Es automático y no tienes que hacer nada.',
+    },
+    {
+      title: 'Te avisamos por email',
+      text: 'Recibirás el resultado en el correo que usaste en la compra.',
+    },
+    {
+      title: 'Acceso automático',
+      text: 'Si el pago se aprueba, te llega el acceso al ebook sin que tengas que volver a comprar.',
+    },
+  ]}
+  note={{
+    title: 'No vuelvas a comprar',
+    text: 'Tu pedido ya está registrado. Si repites la compra mientras el pago está en análisis, podrías pagar dos veces.',
+  }}
+  cta={{ label: 'Ver el estado de mi compra', href: PURCHASES_URL }}
+/>

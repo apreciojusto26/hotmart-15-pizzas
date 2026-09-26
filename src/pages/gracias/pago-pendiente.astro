@@ -1,0 +1,33 @@
+---
+import ThankYou from '../../components/ThankYou.astro';
+import { PURCHASES_URL } from '../../consts';
+---
+
+<!-- Hotmart → "URL para Compras a la espera de pago" -->
+<ThankYou
+  variant="pending"
+  title="Pedido recibido: pago pendiente | Italy Pizza"
+  eyebrow="PEDIDO RECIBIDO"
+  heading="Tu pedido está reservado,"
+  highlight="solo falta el pago"
+  lead="Recibimos tu pedido del ebook Pizzas Caseras Fáciles. En cuanto se confirme el pago, te llegará el acceso por email."
+  steps={[
+    {
+      title: 'Completa el pago',
+      text: 'Si tu método de pago lo requiere, Hotmart te envió las instrucciones por email. Síguelas para terminar la compra.',
+    },
+    {
+      title: 'Espera la confirmación',
+      text: 'Algunos métodos de pago tardan en acreditarse. No hace falta que hagas nada más: el sistema lo detecta solo.',
+    },
+    {
+      title: 'Recibe tu acceso',
+      text: 'Con el pago confirmado, te llega el acceso al correo de la compra y el ebook aparece en "Mis compras" de Hotmart.',
+    },
+  ]}
+  note={{
+    title: 'No vuelvas a comprar',
+    text: 'Tu pedido ya está registrado. Si repites la compra mientras el pago está pendiente, podrías pagar dos veces.',
+  }}
+  cta={{ label: 'Ver el estado de mi compra', href: PURCHASES_URL }}
+/>

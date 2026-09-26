@@ -1,0 +1,164 @@
+---
+import Analytics from './Analytics.astro';
+import '../styles/global.css';
+
+// Plantilla común de las páginas de agradecimiento que Hotmart abre después del checkout.
+// Cada estado (aprobada, pendiente, en análisis) solo cambia textos, color e icono.
+type Variant = 'approved' | 'pending' | 'review';
+type Step = { title: string; text: string };
+
+interface Props {
+  variant: Variant;
+  title: string;
+  eyebrow: string;
+  heading: string;
+  highlight: string;
+  lead: string;
+  steps: Step[];
+  note: { title: string; text: string };
+  cta?: { label: string; href: string };
+}
+
+const { variant, title, eyebrow, heading, highlight, lead, steps, note, cta } = Astro.props;
+
+const theme = {
+  approved: { color: '#3ecf8e', glow: 'rgba(62,207,142,.45)', badge: 'bg-pizza-success/15 text-[#1f8a5b]', path: 'M15 27.5l8 8L38 19' },
+  pending: { color: '#fca503', glow: 'rgba(252,165,3,.45)', badge: 'bg-pizza-amber/20 text-pizza-brown', path: 'M26 15v11l7 5' },
+  review: { color: '#8b4729', glow: 'rgba(139,71,41,.4)', badge: 'bg-pizza-brown/12 text-pizza-brown', path: 'M17 26h.01M26 26h.01M35 26h.01' },
+}[variant];
+
+const shield = 'M12 3 4 6v6c0 4.5 3.2 8 8 9 4.8-1 8-4.5 8-9V6l-8-3Zm-3 9 2 2 4-4';
+const mail = 'M4 6h16v12H4V6Zm0 0 8 7 8-7';
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <!-- Páginas post-compra: no deben aparecer en buscadores. -->
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#fdf8f1" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+    <Analytics />
+  </head>
+  <body>
+    <main class="capture-background relative min-h-screen overflow-hidden px-5 pt-8 pb-16 sm:px-6 sm:pt-10">
+      <div class="pointer-events-none absolute -top-32 -right-24 size-[420px] rounded-full bg-pizza-red/10 blur-3xl"></div>
+      <div class="pointer-events-none absolute -bottom-40 -left-24 size-[420px] rounded-full bg-pizza-amber/20 blur-3xl"></div>
+
+      {
+        variant === 'approved' && (
+          <div class="pointer-events-none absolute inset-x-0 top-0 h-[420px]" aria-hidden="true">
+            <span class="absolute top-[14%] left-[12%] size-3 animate-float rounded-full bg-pizza-red" />
+            <span class="absolute top-[30%] left-[22%] size-2 animate-float rounded-full bg-pizza-amber [animation-delay:-2s]" />
+            <span class="absolute top-[10%] right-[18%] size-4 animate-float rounded-full border-3 border-pizza-amber [animation-delay:-1s]" />
+            <span class="absolute top-[34%] right-[10%] size-2.5 animate-float rounded-full bg-pizza-basil [animation-delay:-3s]" />
+            <span class="absolute top-[22%] right-[30%] size-2 animate-float rounded-full bg-pizza-red [animation-delay:-4s]" />
+          </div>
+        )
+      }
+
+      <div class="relative mx-auto w-full max-w-[760px]">
+        <a href="/pizzas-caseras-faciles" aria-label="Italy Pizza">
+          <img src="/assets/logo-italypizza.png" alt="Italy Pizza" width="2064" height="549" class="mx-auto mb-10 w-[150px] sm:w-[170px]" />
+        </a>
+
+        <!-- ESTADO -->
+        <section class="lead-banner text-center" aria-labelledby="thanks-title">
+          <div class="relative mx-auto mb-6 flex size-[88px] items-center justify-center">
+            <span class="lead-check-ring absolute inset-0 rounded-full" style={`background:${theme.color}`} aria-hidden="true"></span>
+            <svg viewBox="0 0 52 52" class="relative size-[88px]" style={`filter:drop-shadow(0 10px 22px ${theme.glow})`} fill="none" aria-hidden="true">
+              <circle class="lead-check-circle" cx="26" cy="26" r="25" fill={theme.color} />
+              <path class="lead-check-mark" d={theme.path} pathLength="1" stroke="#fff" stroke-width={variant === 'review' ? 6 : 4.5} stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+
+          <p class={`mb-4 inline-flex rounded-full px-4 py-2 text-[11px] font-extrabold tracking-[1px] ${theme.badge}`}>{eyebrow}</p>
+
+          <h1 id="thanks-title" class="mx-auto mb-4 max-w-[640px] font-display text-[34px] leading-[1.08] font-extrabold tracking-[-1.4px] text-pizza-text sm:text-5xl sm:tracking-[-2px]">
+            {heading} <span class="text-pizza-red">{highlight}</span>
+          </h1>
+          <p class="mx-auto mb-10 max-w-[560px] text-base leading-[1.65] text-pizza-muted sm:text-lg">{lead}</p>
+        </section>
+
+        <!-- PRODUCTO -->
+        <article class="mb-8 flex items-center gap-4 rounded-3xl border border-pizza-brown/10 bg-white p-3.5 shadow-[0_20px_50px_rgba(91,48,28,.12)] sm:gap-5 sm:p-4">
+          <img src="/ventas/producto.webp" alt="Ebook Pizzas Caseras Fáciles" width="600" height="600" class="size-20 shrink-0 rounded-2xl object-cover sm:size-24" />
+          <div class="min-w-0 flex-1">
+            <p class="m-0 text-[11px] font-extrabold tracking-[1px] text-pizza-red">TU EBOOK</p>
+            <p class="m-0 font-display text-base leading-snug font-extrabold text-pizza-text sm:text-lg">Pizzas Caseras Fáciles</p>
+            <p class="m-0 mt-0.5 text-xs text-pizza-muted sm:text-sm">Masa universal + 15 recetas + 2 focaccias sorpresa</p>
+          </div>
+          <span class={`hidden shrink-0 rounded-full px-3 py-1.5 text-[10px] font-extrabold tracking-wider sm:inline-flex ${theme.badge}`}>
+            {variant === 'approved' ? 'CONFIRMADO' : variant === 'pending' ? 'PENDIENTE' : 'EN ANÁLISIS'}
+          </span>
+        </article>
+
+        <!-- PASOS -->
+        <section class="mb-8 rounded-[28px] border border-pizza-brown/10 bg-white p-6 shadow-[0_20px_50px_rgba(91,48,28,.08)] sm:p-8" aria-labelledby="steps-title">
+          <h2 id="steps-title" class="mb-6 font-display text-xl font-extrabold tracking-[-0.5px] sm:text-2xl">¿Y ahora qué?</h2>
+          <ol class="m-0 grid list-none gap-0 p-0">
+            {
+              steps.map((s, i) => (
+                <li class="relative flex gap-4 pb-6 last:pb-0">
+                  {i < steps.length - 1 && <span class="absolute top-11 bottom-1 left-[19px] w-0.5 bg-pizza-brown/12" aria-hidden="true" />}
+                  <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-pizza-brown font-display text-base font-extrabold text-white shadow-[0_8px_18px_rgba(139,71,41,.28)]">{i + 1}</span>
+                  <div class="pt-1.5">
+                    <h3 class="m-0 mb-1 font-display text-base font-extrabold">{s.title}</h3>
+                    <p class="m-0 text-sm leading-[1.6] text-pizza-muted">{s.text}</p>
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+
+          {
+            cta && (
+              <a href={cta.href} target="_blank" rel="noopener" class="group mt-8 flex min-h-[58px] w-full items-center justify-center rounded-2xl bg-linear-to-br from-[#d23a3d] to-[#b3242a] px-6 text-base font-extrabold text-white shadow-[0_14px_32px_rgba(190,40,43,.32)] transition hover:-translate-y-0.5 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-pizza-brown">
+                {cta.label}
+                <span class="ml-2 transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
+              </a>
+            )
+          }
+        </section>
+
+        <!-- NOTA -->
+        <aside class="mb-8 flex gap-4 rounded-3xl bg-pizza-amber/12 p-5 sm:p-6">
+          <span class="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-white text-pizza-brown shadow-sm">
+            <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={mail} /></svg>
+          </span>
+          <div>
+            <p class="m-0 mb-1 font-display font-extrabold">{note.title}</p>
+            <p class="m-0 text-sm leading-[1.6] text-pizza-muted">{note.text}</p>
+          </div>
+        </aside>
+
+        <!-- GARANTÍA -->
+        <div class="flex flex-col items-center gap-4 rounded-3xl bg-pizza-deep px-6 py-6 text-center text-white sm:flex-row sm:text-left">
+          <span class="flex size-14 shrink-0 flex-col items-center justify-center rounded-full border-2 border-pizza-amber font-display">
+            <span class="text-xl leading-none font-extrabold text-pizza-amber">7</span>
+            <span class="text-[8px] font-extrabold tracking-[1.5px] text-pizza-amber-light">DÍAS</span>
+          </span>
+          <p class="m-0 text-sm leading-[1.6] text-white/75">
+            <strong class="text-white">Tu compra está protegida.</strong> Tienes 7 días de garantía: si el ebook no es lo que esperabas, pides el reembolso desde Hotmart.
+          </p>
+          <svg viewBox="0 0 24 24" class="hidden size-7 shrink-0 text-pizza-amber sm:block" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={shield} /></svg>
+        </div>
+      </div>
+    </main>
+
+    <footer class="bg-pizza-cream px-5 pb-10 text-center">
+      <p class="m-0 text-[11px] text-[#948379]">Recetas por Ernesto Daniel Longone · © 2026 Italy Pizza</p>
+    </footer>
+  </body>
+</html>
