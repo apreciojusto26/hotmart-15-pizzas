@@ -74,6 +74,7 @@ assets/                             Originales sin optimizar (solo en local, ign
 | Link de compra de Hotmart         | `CHECKOUT_URL` al inicio de `pizzas-caseras-faciles.astro`     |
 | Precio                            | `PRICE_N` en el mismo archivo                                  |
 | Botón de WhatsApp del banner      | `WHATSAPP_NUMBER` en el mismo archivo (vacío = sin botón)      |
+| Banner de la comunidad WhatsApp   | `COMMUNITY_URL` en el mismo archivo (vacío = sin banner)       |
 | Etiqueta que arranca el workflow  | `SYSTEME_IO_LEAD_TAG_ID` en `.env` (y en el hosting)           |
 | A dónde redirige tras el registro | `SALES_PAGE_URL` en `CapturePage.tsx`                          |
 | Textos y SEO de ventas            | `title` y `description` al inicio de `pizzas-caseras-faciles.astro` |

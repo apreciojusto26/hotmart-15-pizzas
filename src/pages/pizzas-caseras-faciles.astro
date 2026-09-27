@@ -6,9 +6,15 @@ const CHECKOUT_URL = 'https://pay.hotmart.com/M103554863Y?checkoutMode=10&bid=17
 
 // Botón "Pincha aquí" del banner: abre WhatsApp con un mensaje ya escrito.
 // Número en formato internacional, sin "+" ni espacios. Vacío = el botón no se muestra.
-const WHATSAPP_NUMBER = '';
+const WHATSAPP_NUMBER = '34602309088'; // +34 602 30 90 88
 const WHATSAPP_MESSAGE = 'Hola, acabo de pedir la masa universal gratis y tengo una consulta.';
 const CONTACT_URL = WHATSAPP_NUMBER ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}` : '';
+
+// Banner superior que invita a la comunidad de WhatsApp. Vacío = el banner no se muestra.
+// Mientras no exista la comunidad, abre un chat con el número y un mensaje ya escrito.
+// Cuando la crees, pon aquí el enlace de invitación (https://chat.whatsapp.com/...).
+const COMMUNITY_MESSAGE = 'Hola, quiero unirme a la comunidad de Italy Pizza.';
+const COMMUNITY_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(COMMUNITY_MESSAGE)}`;
 
 // Precio en €. Sin precio ancla: solo se muestra el precio real de Hotmart.
 const fmt = (n: number) => n.toFixed(2).replace('.', ',');
@@ -222,6 +228,52 @@ const jsonLd = [
         </button>
       </div>
     </div>
+
+    <!-- COMUNIDAD DE WHATSAPP -->
+    {
+      COMMUNITY_URL && (
+        <div id="community-banner" role="region" aria-label="Comunidad de WhatsApp" class="lead-banner relative overflow-hidden border-b-[3px] border-[#25d366] bg-linear-to-r from-pizza-deep via-pizza-brown to-pizza-deep text-white shadow-[0_10px_30px_rgba(43,26,19,.35)]">
+          <div class="pointer-events-none absolute -top-16 -left-10 size-48 rounded-full bg-[#25d366]/25 blur-3xl" />
+          <div class="pointer-events-none absolute -right-10 -bottom-16 size-48 rounded-full bg-pizza-amber/20 blur-3xl" />
+
+          <div class="relative mx-auto flex max-w-[1180px] flex-col items-center gap-4 px-5 py-5 pr-14 text-center sm:px-6 sm:pr-16 md:flex-row md:gap-6 md:py-4 md:text-left">
+            <div class="relative flex size-14 shrink-0 items-center justify-center">
+              <span class="lead-check-ring absolute inset-0 rounded-full bg-[#25d366]" aria-hidden="true" />
+              <span class="lead-check-circle relative flex size-14 items-center justify-center rounded-full bg-[#25d366] shadow-[0_6px_14px_rgba(37,211,102,.45)]">
+                <svg viewBox="0 0 24 24" class="size-7" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" /><path d="M8 12h.01M12 12h.01M16 12h.01" stroke-width="2.6" /></svg>
+              </span>
+            </div>
+
+            <div class="md:flex-1">
+              <p class="m-0 font-display text-lg leading-snug font-extrabold sm:text-xl">
+                ¿Te apasiona la pizza casera? Únete a nuestra comunidad
+              </p>
+              <p class="m-0 mt-1 text-sm leading-[1.55] text-white/80 sm:text-[15px]">
+                Escríbenos por WhatsApp y te sumamos gratis a la comunidad de Italy Pizza.
+              </p>
+            </div>
+
+            <a
+              href={COMMUNITY_URL}
+              target="_blank"
+              rel="noopener"
+              class="group inline-flex min-h-[46px] shrink-0 items-center justify-center rounded-full bg-[#25d366] px-6 text-sm font-extrabold text-white shadow-[0_8px_20px_rgba(0,0,0,.25)] transition hover:-translate-y-0.5 hover:bg-[#1ebe5a] focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-pizza-amber"
+            >
+              Unirme gratis <span class="ml-2 transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
+            </a>
+          </div>
+
+          <button
+            type="button"
+            id="community-banner-close"
+            aria-label="Cerrar aviso de la comunidad"
+            class="absolute top-2.5 right-3 flex size-10 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/25 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-pizza-amber sm:right-4"
+          >
+            <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+          </button>
+        </div>
+      )
+    }
 
     <!-- ANNOUNCEMENT -->
     <div class="bg-pizza-deep px-4 py-2.5 text-center text-xs font-semibold tracking-wide text-white sm:text-[13px]">
@@ -613,6 +665,19 @@ const jsonLd = [
 
       document.getElementById('lead-banner-close')?.addEventListener('click', () => {
         if (banner) banner.hidden = true;
+      });
+
+      document.getElementById('community-banner-close')?.addEventListener('click', () => {
+        document.getElementById('community-banner')?.remove();
+      });
+
+      // GA4: clic hacia la comunidad de WhatsApp.
+      document.addEventListener('click', (event) => {
+        if (!(event.target as HTMLElement).closest('#community-banner a')) return;
+        (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag?.('event', 'join_group', {
+          group_id: 'whatsapp_community',
+          transport_type: 'beacon',
+        });
       });
 
       // GA4: clic hacia el checkout de Hotmart (inicio de compra). `beacon` asegura el envío aunque la página se descargue.
