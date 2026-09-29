@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 
-// "/" redirige a ventas: no la listamos para no duplicar la misma página.
-const PATHS = ['/pizzas-caseras-faciles'];
+// "/" redirige a la captura: no la listamos para no duplicar la misma página.
+const PATHS = ['/pizzas-caseras-faciles', '/conos-de-pizza'];
 
 export const GET: APIRoute = ({ site }) => {
   const urls = site

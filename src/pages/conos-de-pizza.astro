@@ -3,9 +3,14 @@ import CapturePage from '../components/CapturePage';
 import Analytics from '../components/Analytics.astro';
 import '../styles/global.css';
 
-const title = 'Masa universal para pizzas caseras (PDF gratis) | Italy Pizza';
+const PAGE_PATH = '/conos-de-pizza';
+const title = 'Conos de pizza caseros (PDF gratis) | Italy Pizza';
 const description =
-  'Descarga gratis la receta de masa universal para pizzas caseras fáciles, explicada paso a paso. Recíbela en tu correo.';
+  'Descarga gratis la guía de conos de pizza caseros: masa sencilla, moldes de aluminio y 4 rellenos que siempre gustan. Recíbela en tu correo.';
+
+const site = Astro.site;
+const canonical = site ? new URL(PAGE_PATH, site).href : undefined;
+const ogImage = site ? new URL('/conos/og-conos-de-pizza.jpg', site).href : '/conos/og-conos-de-pizza.jpg';
 ---
 
 <!doctype html>
@@ -16,9 +21,14 @@ const description =
     <meta name="description" content={description} />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#fdf8f1" />
+    {canonical && <link rel="canonical" href={canonical} />}
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content="Guía gratuita Conos de pizza caseros, fáciles y para compartir" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

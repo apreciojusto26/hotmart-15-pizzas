@@ -5,9 +5,9 @@ const SALES_PAGE_URL = '/pizzas-caseras-faciles?enviado=1';
 const GENERIC_ERROR = 'No pudimos registrar tu email. Inténtalo de nuevo.';
 
 const benefits = [
-  'Receta de masa explicada paso a paso',
-  'Ideal para cualquier tipo de pizza',
-  'Acceso digital inmediato',
+  'Una masa sencilla para 10 conos, paso a paso',
+  'Moldes caseros de aluminio: no tienes que comprar nada',
+  '4 rellenos que siempre gustan',
 ];
 
 function FlameIcon({ className }: { className?: string }) {
@@ -151,14 +151,14 @@ export default function CapturePage() {
             id="capture-title"
             className="mx-auto mb-5 max-w-[700px] font-display text-[39px] leading-[1.05] font-extrabold tracking-[-1.8px] text-pizza-text sm:text-5xl lg:mx-0 lg:text-[clamp(42px,5vw,68px)] lg:leading-[1.04] lg:tracking-[-2.8px]"
           >
-            Descubre la <span className="text-pizza-red">masa universal</span> para hacer{' '}
-            <span className="text-pizza-brown">pizzas caseras</span> sin complicarte
+            Haz <span className="text-pizza-red">conos de pizza</span> caseros,{' '}
+            <span className="text-pizza-brown">fáciles y para compartir</span>
           </h1>
 
           <p className="mx-auto mb-7 max-w-[620px] text-base leading-[1.6] text-pizza-muted sm:text-lg sm:leading-[1.65] lg:mx-0">
-            Recibe gratis la receta de{' '}
-            <strong className="font-bold text-pizza-text">masa universal de Ernesto Daniel Longone</strong>, explicada
-            paso a paso para que te salga bien desde la primera vez.
+            Toda una pizza dentro de un cono:{' '}
+            <strong className="font-bold text-pizza-text">crujiente por fuera y con queso fundido por dentro</strong>.
+            Recibe gratis la guía paso a paso y hazlos con el horno de tu casa.
           </p>
 
           <ul className="mx-auto mb-7 flex max-w-[480px] flex-col gap-3 text-left lg:mx-0 lg:mb-8">
@@ -183,7 +183,7 @@ export default function CapturePage() {
             aria-expanded={isOpen}
             className="group inline-flex min-h-[58px] w-full max-w-[480px] cursor-pointer items-center justify-center rounded-[13px] bg-linear-to-br from-[#d23a3d] to-[#b3242a] px-5 text-base font-bold text-white shadow-[0_12px_28px_rgba(190,40,43,.28)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_34px_rgba(190,40,43,.34)] focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-pizza-brown sm:min-h-[62px] sm:w-auto sm:px-8 sm:text-[17px]"
           >
-            Quiero la masa universal gratis
+            Quiero mi guía de conos gratis
             <span className="ml-2.5 transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">
               →
             </span>
@@ -200,20 +200,19 @@ export default function CapturePage() {
             <span className="absolute top-3.5 -right-1.5 z-10 rotate-5 rounded-lg bg-pizza-red px-3 py-2 text-[9px] font-extrabold tracking-[1px] text-white shadow-[0_10px_22px_rgba(190,40,43,.24)] lg:top-[30px] lg:-right-[18px] lg:px-[17px] lg:py-2.5 lg:text-[11px]">
               GRATIS
             </span>
-            {/* La imagen del producto trae texto abajo: recortamos para mostrar solo las pizzas. */}
             <img
-              src="/ventas/producto.webp"
-              alt="Pizzas caseras preparadas con la masa universal"
-              className="block aspect-[600/372] h-auto w-full rounded-[17px] object-cover object-top"
-              width="600"
-              height="372"
+              src="/conos/portada.webp"
+              alt="Guía Conos de pizza caseros en libro y en móvil"
+              className="block aspect-square h-auto w-full rounded-[17px] object-cover"
+              width="900"
+              height="900"
               loading="eager"
               fetchPriority="high"
             />
             <div className="flex items-center justify-between px-1 pt-[18px] pb-1">
               <div>
-                <p className="m-0 text-xs text-pizza-muted">PDF gratuito</p>
-                <p className="m-0 font-display text-[25px] font-extrabold text-pizza-text">Masa universal</p>
+                <p className="m-0 text-xs text-pizza-muted">PDF gratuito · 12 páginas</p>
+                <p className="m-0 font-display text-[25px] font-extrabold text-pizza-text">Conos de pizza</p>
               </div>
               <span className="flex size-11 items-center justify-center rounded-full bg-pizza-amber/20 text-pizza-red">
                 <FlameIcon className="size-6" />
@@ -262,7 +261,7 @@ export default function CapturePage() {
               id="capture-dialog-title"
               className="mb-2.5 font-display text-[27px] leading-[1.15] font-extrabold tracking-[-0.8px] text-pizza-text sm:text-[31px] sm:tracking-[-1.1px]"
             >
-              ¿Dónde te enviamos tu <span className="text-pizza-red">masa universal?</span>
+              ¿Dónde te enviamos tu <span className="text-pizza-red">guía de conos?</span>
             </h2>
             <p
               id="capture-dialog-description"
@@ -300,7 +299,7 @@ export default function CapturePage() {
                 disabled={status === 'sending'}
                 className="mt-0.5 min-h-[58px] w-full cursor-pointer rounded-[13px] border-0 bg-linear-to-br from-[#d23a3d] to-[#b3242a] px-5 text-[15px] font-bold text-white shadow-[0_11px_25px_rgba(190,40,43,.25)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(190,40,43,.32)] focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-pizza-brown disabled:cursor-wait disabled:opacity-70 sm:min-h-[60px] sm:text-base"
               >
-                {status === 'sending' ? 'Enviando...' : 'Recibir mi masa universal →'}
+                {status === 'sending' ? 'Enviando...' : 'Recibir mi guía de conos →'}
               </button>
               {status === 'error' && (
                 <p role="alert" className="m-0 text-[13px] text-pizza-red-dark">

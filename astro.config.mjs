@@ -6,11 +6,9 @@ import tailwindcss from '@tailwindcss/vite';
 // Define SITE_URL (p. ej. https://tudominio.com) para canonical, og:url, JSON-LD y robots.txt.
 export default defineConfig({
   site: process.env.SITE_URL || undefined,
-  // Venta directa (somos productores): la raíz lleva a la página de ventas.
-  // La captura sigue en src/pages/_captura.astro y api/_lead.ts, desactivadas por el "_".
-  // Para reactivarlas: quitar el "_" a ambos archivos y borrar esta redirección.
+  // La raíz lleva a la captura (lead magnet de conos de pizza); tras dejar el email, redirige a ventas.
   redirects: {
-    '/': '/pizzas-caseras-faciles',
+    '/': '/conos-de-pizza',
   },
   // Las páginas son estáticas; solo las rutas con `prerender = false` (/api/lead) corren en servidor.
   adapter: vercel(),
